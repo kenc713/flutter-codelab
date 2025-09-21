@@ -36,9 +36,18 @@ class MyApp extends StatelessWidget {
 // 状態クラスは 自身の変更に関する通知を行うことができるChangeNotifierを拡張して作成。
 // 状態は、ChangeNotifierProviderを使用して作成され、アプリ全体に提供される。
 // (アプリ内のどのウィジェットも状態を取得可能)
-// このアプリではランダムな単語のペアを定義
+
 class MyAppState extends ChangeNotifier {
+
+  // ランダムな単語のペアを定義
   var current = WordPair.random();
+
+  // 単語の更新
+  void getNext() {
+    current = WordPair.random();
+    notifyListeners();
+  }
+
 }
 
 class MyHomePage extends StatelessWidget {

@@ -72,10 +72,13 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       body: Row(
         children: [
-          // サイドバー
+          // SafeArea: デバイスのノッチやステータスバー、ホームインジケーターなどの
+          // システムUI要素と重ならないようにするウィジェット
           SafeArea(
+            // サイドバー
             child: NavigationRail(
               extended: false,
+              // サイドバーの項目
               destinations: [
                 NavigationRailDestination(
                   icon: Icon(Icons.home),
@@ -86,13 +89,14 @@ class MyHomePage extends StatelessWidget {
                   label: Text('Favorites'),
                 ),
               ],
+              // 選択中のインデックス
               selectedIndex: 0,
+              // 項目が選択されたときのコールバック
               onDestinationSelected: (value) {
                 print('selected: $value');
               },
             ),
           ),
-
           // メインコンテンツ
           Expanded(
             child: Container(

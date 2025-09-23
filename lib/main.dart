@@ -93,51 +93,55 @@ class _MyHomePageState extends State<MyHomePage> {
         throw UnimplementedError('no widget for $selectedIndex');
     }
 
-    return Scaffold(
-      body: Row(
-        children: [
-          // SafeArea: デバイスのノッチやステータスバー、ホームインジケーターなどの
-          // システムUI要素と重ならないようにするウィジェット
-          SafeArea(
-            // サイドバー
-            child: NavigationRail(
-              // サイドバーの拡張表示
-              // falseの場合、アイコンのみ表示
-              extended: false,
-              // サイドバーの項目
-              destinations: [
-                NavigationRailDestination(
-                  icon: Icon(Icons.home),
-                  label: Text('Home'),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Scaffold(
+          body: Row(
+            children: [
+              // SafeArea: デバイスのノッチやステータスバー、ホームインジケーターなどの
+              // システムUI要素と重ならないようにするウィジェット
+              SafeArea(
+                // サイドバー
+                child: NavigationRail(
+                  // サイドバーの拡張表示
+                  // falseの場合、アイコンのみ表示
+                  extended: constraints.maxWidth >= 600,
+                  // サイドバーの項目
+                  destinations: [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.home),
+                      label: Text('Home'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.favorite),
+                      label: Text('Favorites'),
+                    ),
+                  ],
+                  // 選択中のインデックス
+                  selectedIndex: selectedIndex,
+                  // 項目が選択されたときのコールバック
+                  onDestinationSelected: (value) {
+                    // 選択中のインデックスを更新
+                    // setState: 状態が変更されたことをFlutterに通知し、UIを再構築
+                    // StatefulWidgetの状態を変更する際に使用される組み込みメソッド
+                    setState(() {
+                      selectedIndex = value;
+                    });
+                  },
                 ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.favorite),
-                  label: Text('Favorites'),
+              ),
+              // メインコンテンツ
+              // Expanded: 子ウィジェットが利用可能なスペースを占有するようにするウィジェット
+              Expanded(
+                child: Container(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  child: page,
                 ),
-              ],
-              // 選択中のインデックス
-              selectedIndex: selectedIndex,
-              // 項目が選択されたときのコールバック
-              onDestinationSelected: (value) {
-                // 選択中のインデックスを更新
-                // setState: 状態が変更されたことをFlutterに通知し、UIを再構築
-                // StatefulWidgetの状態を変更する際に使用される組み込みメソッド
-                setState(() {
-                  selectedIndex = value;
-                });
-              },
-            ),
+              ),
+            ],
           ),
-          // メインコンテンツ
-          // Expanded: 子ウィジェットが利用可能なスペースを占有するようにするウィジェット
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              child: page,
-            ),
-          ),
-        ],
-      ),
+        );
+      }
     );
   }
 }

@@ -100,6 +100,7 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
           // メインコンテンツ
+          // Expanded: 子ウィジェットが利用可能なスペースを占有するようにするウィジェット
           Expanded(
             child: Container(
               color: Theme.of(context).colorScheme.primaryContainer,

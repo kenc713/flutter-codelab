@@ -5,7 +5,6 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 // MyAppで定義したアプリの実行をFlutterに指示
 void main() {
   runApp(MyApp());
@@ -38,7 +37,6 @@ class MyApp extends StatelessWidget {
 // (アプリ内のどのウィジェットも状態を取得可能)
 
 class MyAppState extends ChangeNotifier {
-
   // ランダムな単語のペアを定義
   var current = WordPair.random();
 
@@ -47,15 +45,12 @@ class MyAppState extends ChangeNotifier {
     current = WordPair.random();
     notifyListeners();
   }
-
 }
 
 class MyHomePage extends StatelessWidget {
-  
   // buildメソッド：ウィジェットを常に最新にするために、周囲の状況が変化するたびに自動的に呼び出されるメソッド
   @override
   Widget build(BuildContext context) {
-
     // MyHomePage では、watchメソッドを使用してアプリの現在の状態に対する変更を追跡
     var appState = context.watch<MyAppState>();
 
@@ -65,27 +60,20 @@ class MyHomePage extends StatelessWidget {
     // どの build メソッドも必ず、ウィジェットか、ウィジェットのネストしたツリー（こちらのほうが一般的）を返却
     // Scaffold: 画面の基本骨組みを提供するウィジェット
     return Scaffold(
-
-
       body: Center(
-
-        // Column: 
+        // Column:
         // Flutterにおける非常に基本的なレイアウトウィジェット
         // 任意の数の子を従え、それらを上から下へ一列に配置（デフォルトでは上揃え）
         // Centerウィジェットでラップすることで、Column自体を左右中央に配置
 
         child: Column(
-        
           // 縦方向に中央揃え
           mainAxisAlignment: MainAxisAlignment.center,
-        
-        
-        
+
           children: [
-        
             // Text：文字列を画面に表示するための基本ウィジェット
             //Text('A random AWESOME idea:'),
-        
+
             // appStateで定義したデータ（単語ペア）を表示
             BigCard(pair: pair),
 
@@ -116,7 +104,6 @@ class BigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final theme = Theme.of(context);
 
     // styleに書式を格納
@@ -131,7 +118,6 @@ class BigCard extends StatelessWidget {
 
     // カードウィジェットを返却
     return Card(
-
       // 色を指定
       color: theme.colorScheme.primary,
 
@@ -139,12 +125,12 @@ class BigCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Text(
-          pair.asLowerCase, 
+          pair.asLowerCase,
           style: style,
 
           // 画面読み上げソフト用のラベルを指定
           semanticsLabel: "${pair.first} ${pair.second}",
-          ),
+        ),
       ),
     );
   }

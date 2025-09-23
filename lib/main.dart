@@ -77,6 +77,8 @@ class MyHomePage extends StatelessWidget {
           SafeArea(
             // サイドバー
             child: NavigationRail(
+              // サイドバーの拡張表示
+              // falseの場合、アイコンのみ表示
               extended: false,
               // サイドバーの項目
               destinations: [

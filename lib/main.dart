@@ -45,6 +45,24 @@ class MyAppState extends ChangeNotifier {
     current = WordPair.random();
     notifyListeners();
   }
+
+  // お気に入りの単語を保持するリスト
+  // var favorites = <WordPair>[];
+
+  // お気に入りの単語を保持する集合
+  var favorites = <WordPair>{};
+
+  // お気に入りの登録、解除を行う関数
+  void toggleFavorite() {
+    if (favorites.contains(current)) {
+      favorites.remove(current);
+    } else {
+      favorites.add(current);
+    }
+    
+    print(favorites);
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatelessWidget {
@@ -80,11 +98,27 @@ class MyHomePage extends StatelessWidget {
             // 余白を確保するためのウィジェット
             SizedBox(height: 10),
 
-            ElevatedButton(
-              onPressed: () {
-                appState.getNext();
-              },
-              child: Text('Next'), // Flutterでは、行末にもカンマをつけるのが慣習
+            // 要素を横並びにするウィジェット
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+                // Favoriteボタン
+                ElevatedButton(
+                  onPressed: () {
+                    appState.toggleFavorite();
+                  },
+                  child: Text('Favorite'),
+                ),
+
+                // Nextボタン
+                ElevatedButton(
+                  onPressed: () {
+                    appState.getNext();
+                  },
+                  child: Text('Next'),
+                )
+              ],
             ),
           ],
         ),

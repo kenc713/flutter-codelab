@@ -59,16 +59,40 @@ class MyAppState extends ChangeNotifier {
     } else {
       favorites.add(current);
     }
-    
+
     print(favorites);
     notifyListeners();
   }
 }
 
-// サイドバー付きのホームページ
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+// State: 変更可能なデータを保持するオブジェクト
+// MyHomePageの状態を管理するクラス
+// _をつけることで、プライベートクラス化
+class _MyHomePageState extends State<MyHomePage> {
+  // サイドバーの選択中インデックス
+  var selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+
+    // 選択中のインデックスに応じて表示するページを切り替え
+    Widget page;
+    switch (selectedIndex) {
+      case 0:
+        page = GeneratorPage();
+        break;
+      case 1:
+        page = Placeholder();
+        break;
+      default:
+        throw UnimplementedError('no widget for $selectedIndex');
+    }
+
     return Scaffold(
       body: Row(
         children: [
@@ -92,10 +116,15 @@ class MyHomePage extends StatelessWidget {
                 ),
               ],
               // 選択中のインデックス
-              selectedIndex: 0,
+              selectedIndex: selectedIndex,
               // 項目が選択されたときのコールバック
               onDestinationSelected: (value) {
-                print('selected: $value');
+                // 選択中のインデックスを更新
+                // setState: 状態が変更されたことをFlutterに通知し、UIを再構築
+                // StatefulWidgetの状態を変更する際に使用される組み込みメソッド
+                setState(() {
+                  selectedIndex = value;
+                });
               },
             ),
           ),
@@ -104,7 +133,7 @@ class MyHomePage extends StatelessWidget {
           Expanded(
             child: Container(
               color: Theme.of(context).colorScheme.primaryContainer,
-              child: GeneratorPage(),
+              child: page,
             ),
           ),
         ],

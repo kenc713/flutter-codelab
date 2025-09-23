@@ -65,75 +65,88 @@ class MyAppState extends ChangeNotifier {
   }
 }
 
+// サイドバー付きのホームページ
 class MyHomePage extends StatelessWidget {
-  // buildメソッド：ウィジェットを常に最新にするために、周囲の状況が変化するたびに自動的に呼び出されるメソッド
   @override
   Widget build(BuildContext context) {
-    // MyHomePage では、watchメソッドを使用してアプリの現在の状態に対する変更を追跡
-    var appState = context.watch<MyAppState>();
+    return Scaffold(
+      body: Row(
+        children: [
+          // サイドバー
+          SafeArea(
+            child: NavigationRail(
+              extended: false,
+              destinations: [
+                NavigationRailDestination(
+                  icon: Icon(Icons.home),
+                  label: Text('Home'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.favorite),
+                  label: Text('Favorites'),
+                ),
+              ],
+              selectedIndex: 0,
+              onDestinationSelected: (value) {
+                print('selected: $value');
+              },
+            ),
+          ),
 
-    // 単語のペア(単語の表示のたびにappState全体を参照するのを避ける)
+          // メインコンテンツ
+          Expanded(
+            child: Container(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              child: GeneratorPage(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// 単語ペアを表示し、お気に入り登録するためのウィジェット
+// HomePageの子ウィジェット
+class GeneratorPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
     var pair = appState.current;
 
-    // Likeボタンのアイコン
     IconData icon;
     if (appState.favorites.contains(pair)) {
-      // お気に入り登録されている場合は塗りつぶしハートアイコンを表示
       icon = Icons.favorite;
     } else {
-      // お気に入り登録されていない場合は枠線ハートアイコンを表示
       icon = Icons.favorite_border;
     }
 
-
-    // どの build メソッドも必ず、ウィジェットか、ウィジェットのネストしたツリー（こちらのほうが一般的）を返却
-    // Scaffold: 画面の基本骨組みを提供するウィジェット
-    return Scaffold(
-      body: Center(
-        // Column:
-        // Flutterにおける非常に基本的なレイアウトウィジェット
-        // 任意の数の子を従え、それらを上から下へ一列に配置（デフォルトでは上揃え）
-        // Centerウィジェットでラップすることで、Column自体を左右中央に配置
-
-        child: Column(
-          // 縦方向に中央揃え
-          mainAxisAlignment: MainAxisAlignment.center,
-
-          children: [
-            // Text：文字列を画面に表示するための基本ウィジェット
-            //Text('A random AWESOME idea:'),
-
-            // appStateで定義したデータ（単語ペア）を表示
-            BigCard(pair: pair),
-
-            // 余白を確保するためのウィジェット
-            SizedBox(height: 10),
-
-            // 要素を横並びにするウィジェット
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-
-                // Likeボタン
-                ElevatedButton.icon(
-                  onPressed: () {
-                    appState.toggleFavorite();
-                  },
-                  icon: Icon(icon),
-                  label: Text('Like'),
-                ),
-
-                // Nextボタン
-                ElevatedButton(
-                  onPressed: () {
-                    appState.getNext();
-                  },
-                  child: Text('Next'),
-                )
-              ],
-            ),
-          ],
-        ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          BigCard(pair: pair),
+          SizedBox(height: 10),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  appState.toggleFavorite();
+                },
+                icon: Icon(icon),
+                label: Text('Like'),
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  appState.getNext();
+                },
+                child: Text('Next'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

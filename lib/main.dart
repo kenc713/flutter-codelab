@@ -75,6 +75,17 @@ class MyHomePage extends StatelessWidget {
     // 単語のペア(単語の表示のたびにappState全体を参照するのを避ける)
     var pair = appState.current;
 
+    // Likeボタンのアイコン
+    IconData icon;
+    if (appState.favorites.contains(pair)) {
+      // お気に入り登録されている場合は塗りつぶしハートアイコンを表示
+      icon = Icons.favorite;
+    } else {
+      // お気に入り登録されていない場合は枠線ハートアイコンを表示
+      icon = Icons.favorite_border;
+    }
+
+
     // どの build メソッドも必ず、ウィジェットか、ウィジェットのネストしたツリー（こちらのほうが一般的）を返却
     // Scaffold: 画面の基本骨組みを提供するウィジェット
     return Scaffold(
@@ -103,12 +114,13 @@ class MyHomePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
 
-                // Favoriteボタン
-                ElevatedButton(
+                // Likeボタン
+                ElevatedButton.icon(
                   onPressed: () {
                     appState.toggleFavorite();
                   },
-                  child: Text('Favorite'),
+                  icon: Icon(icon),
+                  label: Text('Like'),
                 ),
 
                 // Nextボタン
